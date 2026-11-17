@@ -128,11 +128,15 @@ Demo scenarios: `rorqual`, `tackled`, `panic`, `wrong`, `docked`, `lost`, `error
 
 ### Publishing a release
 
+Commit your changes, then:
+
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\build-release.ps1 -Version 0.2.0
+powershell -ExecutionPolicy Bypass -File .\publish-release.ps1 -Version 0.2.1
 ```
 
-Then create a GitHub release tagged `v0.2.0` and upload **every file** from `Releases\`: the `Setup.exe` and `Portable.zip` for players, plus `*.nupkg`, `releases.win.json`, `assets.win.json` and `RELEASES`, which the in-app updater needs.
+It pushes `main`, runs the tests, builds the installer and creates the GitHub release `v0.2.1` with all the files the installer and the in-app updater need. It uses the GitHub login already stored by Git. Add `-Draft` to review the release before players see it. Step-by-step guide (French): [docs/PUBLIER-UNE-VERSION.md](docs/PUBLIER-UNE-VERSION.md).
+
+`build-release.ps1 -Version x.y.z` only builds the files into `Releases\`, without publishing.
 
 The EVE application settings (client ID, callback `http://localhost:8642/callback`, scopes) are in `src/IndustrialDuckPanic.Core/AppConstants.cs`.
 
