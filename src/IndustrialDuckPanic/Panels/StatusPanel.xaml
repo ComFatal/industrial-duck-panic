@@ -1,0 +1,93 @@
+<UserControl x:Class="IndustrialDuckPanic.Panels.StatusPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:IndustrialDuckPanic.Controls">
+    <UserControl.Resources>
+        <c:HealthToBrush x:Key="HealthBrush" />
+        <Style x:Key="Key" TargetType="TextBlock" BasedOn="{StaticResource Label}">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+        <Style x:Key="Val" TargetType="TextBlock" BasedOn="{StaticResource Body}">
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+        <Style x:Key="Dot" TargetType="Ellipse">
+            <Setter Property="Width" Value="12" />
+            <Setter Property="Height" Value="12" />
+            <Setter Property="Margin" Value="0,3,10,0" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
+    </UserControl.Resources>
+    <StackPanel>
+        <Border Style="{StaticResource Section}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="110" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Ellipse Grid.Row="0" Style="{StaticResource Dot}" Fill="{Binding EsiHealth, Converter={StaticResource HealthBrush}}" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="EVE (ESI)" Style="{StaticResource Key}" />
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding EsiDetail}" Style="{StaticResource Val}" />
+
+                <Ellipse Grid.Row="1" Style="{StaticResource Dot}" Fill="{Binding WebhookHealth, Converter={StaticResource HealthBrush}}" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="Discord webhook" Style="{StaticResource Key}" />
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding WebhookDetail}" Style="{StaticResource Val}" />
+
+                <Ellipse Grid.Row="2" Style="{StaticResource Dot}" Fill="{Binding GamelogHealth, Converter={StaticResource HealthBrush}}" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="Game logs" Style="{StaticResource Key}" />
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding GamelogDetail}" Style="{StaticResource Val}" />
+            </Grid>
+        </Border>
+
+        <Border Style="{StaticResource Section}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Character" Style="{StaticResource Key}" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CharacterName}" Style="{StaticResource Val}" />
+                <TextBlock Grid.Row="1" Text="Ship" Style="{StaticResource Key}" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ShipTypeName}" Style="{StaticResource Val}" />
+                <TextBlock Grid.Row="2" Text="System" Style="{StaticResource Key}" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource Val}">
+                    <Run Text="{Binding SystemName, Mode=OneWay}" /><Run Text="  " /><Run Text="{Binding SecurityText, Mode=OneWay}" Foreground="{StaticResource DimBrush}" />
+                </TextBlock>
+                <TextBlock Grid.Row="3" Text="State" Style="{StaticResource Key}" />
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding LocationText}" Style="{StaticResource Val}" />
+            </Grid>
+        </Border>
+
+        <Border Style="{StaticResource Section}">
+            <StackPanel>
+                <TextBlock Text="Options" Style="{StaticResource H2}" Margin="0,0,0,8" />
+                <CheckBox x:Name="Topmost" Content="Keep the window above the game" Click="Topmost_Click" />
+                <TextBlock Style="{StaticResource Muted}" Margin="0,12,0,4" Text="Game log folder" />
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Content="Change…" Style="{StaticResource ActionButton}" Margin="8,0,0,0" Click="Folder_Click" />
+                    <Button DockPanel.Dock="Right" Content="Default" Style="{StaticResource ActionButton}" Margin="8,0,0,0" Click="FolderDefault_Click" />
+                    <TextBlock x:Name="FolderText" Style="{StaticResource Muted}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                </DockPanel>
+                <DockPanel Margin="0,14,0,0">
+                    <Button DockPanel.Dock="Left" Content="Check for updates" Style="{StaticResource ActionButton}" Click="Update_Click" />
+                    <Button DockPanel.Dock="Left" Content="Test the TACKLED light" Style="{StaticResource ActionButton}" Margin="8,0,0,0" Click="Simulate_Click"
+                            ToolTip="Lights the alert for 10 s without sending anything to Discord" />
+                </DockPanel>
+                <TextBlock x:Name="UpdateText" Style="{StaticResource Muted}" Margin="0,8,0,0" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

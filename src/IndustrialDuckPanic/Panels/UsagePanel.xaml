@@ -1,0 +1,49 @@
+<UserControl x:Class="IndustrialDuckPanic.Panels.UsagePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    <StackPanel>
+        <Border Style="{StaticResource Section}">
+            <StackPanel>
+                <TextBlock Text="Allowed ships" Style="{StaticResource H2}" Margin="0" />
+                <TextBlock Style="{StaticResource Muted}" Margin="0,4,0,10"
+                           Text="The app works only in these ships: every Industrial Command Ship and Capital Industrial Ship. The list comes from EVE, so a new hull shows up here by itself." />
+                <ItemsControl ItemsSource="{Binding AllowedShips}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="{StaticResource LineBrush}" BorderThickness="0,0,0,1" Padding="0,6">
+                                <DockPanel>
+                                    <Border Width="40" Height="40" Background="#FF0C0B0A" BorderBrush="{StaticResource LineBrush}" BorderThickness="1" CornerRadius="2">
+                                        <Image Source="{Binding IconUrl}" Width="38" Height="38" />
+                                    </Border>
+                                    <Border DockPanel.Dock="Right" VerticalAlignment="Center" Background="#33E0262E" BorderBrush="#FFE0262E" BorderThickness="1" CornerRadius="2" Padding="6,1"
+                                            Visibility="{Binding HasPanic, Converter={StaticResource BoolToVis}}">
+                                        <TextBlock Text="PANIC" FontFamily="{StaticResource DisplayFont}" FontSize="11" Foreground="#FFFF8A8A" />
+                                    </Border>
+                                    <TextBlock Text="{Binding Name}" Style="{StaticResource Body}" VerticalAlignment="Center" Margin="12,0,8,0" />
+                                </DockPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock Style="{StaticResource Muted}" Margin="0,10,0,0">
+                    <Run Text="Source: " /><Run Text="{Binding AllowedShipsSource, Mode=OneWay}" />
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <Border Style="{StaticResource Section}">
+            <StackPanel>
+                <TextBlock Text="How it works" Style="{StaticResource H2}" Margin="0" />
+                <TextBlock Style="{StaticResource Body}" Margin="0,6,0,0" Text="•  TACKLED lights up when the game log shows a warp scrambler or disruptor on you. One Discord message is sent per tackle. The light turns off after 60 seconds without a new attempt, when you dock, or with Silence." />
+                <TextBlock Style="{StaticResource Body}" Margin="0,6,0,0" Text="•  PANIC (Rorqual only): lift the glass cover, then press the button to warn Discord. It does not activate the module in game: do that yourself." />
+                <TextBlock Style="{StaticResource Body}" Margin="0,6,0,0" Text="•  I'M OK tells Discord you are alive and safe, and turns the alerts off." />
+                <TextBlock Style="{StaticResource Body}" Margin="0,6,0,0" Text="•  Ship loss is detected when your allowed ship turns into a capsule in space. A message is sent automatically." />
+                <TextBlock Style="{StaticResource Body}" Margin="0,6,0,0" Text="•  The switch moves by itself: OFF docked, ON in space, middle when the state is unknown (offline, error)." />
+                <TextBlock Style="{StaticResource Muted}" Margin="0,10,0,0" Text="Tackle detection reads the English game client logs (Documents\EVE\logs\Gamelogs). Nothing is ever sent or typed in game." />
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

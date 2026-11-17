@@ -1,0 +1,46 @@
+<UserControl x:Class="IndustrialDuckPanic.Panels.CharacterPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:IndustrialDuckPanic.Controls">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <c:InverseBoolToVisibility x:Key="NotBoolToVis" />
+        <c:NullToCollapsed x:Key="NullToCollapsed" />
+        <c:InverseBool x:Key="NotBool" />
+    </UserControl.Resources>
+    <StackPanel>
+        <!-- connected -->
+        <Border Style="{StaticResource Section}" Visibility="{Binding IsConnected, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Border Width="96" Height="96" BorderBrush="{StaticResource LineBrush}" BorderThickness="1" CornerRadius="3" ClipToBounds="True">
+                        <Image Source="{Binding PortraitUrl}" Stretch="UniformToFill" />
+                    </Border>
+                    <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding CharacterName}" Style="{StaticResource H1}" Margin="0,0,0,4" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding CorporationName}" Style="{StaticResource Body}" />
+                        <TextBlock Text="{Binding AllianceName}" Style="{StaticResource Muted}" Visibility="{Binding AllianceName, Converter={StaticResource NullToCollapsed}}" />
+                    </StackPanel>
+                </StackPanel>
+                <TextBlock Style="{StaticResource Muted}" Margin="0,14,0,0"
+                           Text="Rights given to the app: read your location, read your ship type, read whether you are online. Nothing else." />
+                <Button Content="Disconnect this character" Style="{StaticResource ActionButton}" HorizontalAlignment="Left" Margin="0,12,0,0" Click="Logout_Click" />
+            </StackPanel>
+        </Border>
+
+        <!-- not connected -->
+        <Border Style="{StaticResource Section}" Visibility="{Binding IsConnected, Converter={StaticResource NotBoolToVis}}">
+            <StackPanel>
+                <TextBlock Style="{StaticResource Body}" Text="Log in with EVE Online to add your character. The EVE login page opens in your browser; the app never sees your password." />
+                <TextBlock Style="{StaticResource H2}" Text="What the app asks for" />
+                <TextBlock Style="{StaticResource Muted}" Text="•  esi-location.read_location.v1: your solar system, docked or not" />
+                <TextBlock Style="{StaticResource Muted}" Text="•  esi-location.read_ship_type.v1: the ship you fly" />
+                <TextBlock Style="{StaticResource Muted}" Text="•  esi-location.read_online.v1: whether you are logged in" />
+                <Button Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left" Margin="0,16,0,0" Click="Login_Click"
+                        IsEnabled="{Binding IsLoggingIn, Converter={StaticResource NotBool}}" Content="LOG IN with EVE ONLINE" />
+                <TextBlock Style="{StaticResource Muted}" Margin="0,8,0,0" Text="Finish the login in your browser…"
+                           Visibility="{Binding IsLoggingIn, Converter={StaticResource BoolToVis}}" />
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

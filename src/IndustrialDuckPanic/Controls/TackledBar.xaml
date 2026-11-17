@@ -1,0 +1,40 @@
+<UserControl x:Class="IndustrialDuckPanic.Controls.TackledBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:IndustrialDuckPanic.Controls">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <c:Beacon x:Name="LeftLed" Grid.Column="0" VerticalAlignment="Center" />
+
+        <!-- The bar itself cannot be pressed (spec): it only lights up. -->
+        <Border x:Name="Bar" Grid.Column="1" Margin="10,0" Height="40" CornerRadius="3" BorderBrush="#FF1D1F22" BorderThickness="1"
+                Cursor="No" ToolTip="Lights up when a warp scrambler or disruptor is on you">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop x:Name="BarTop" Color="#FF45494F" Offset="0" />
+                    <GradientStop x:Name="BarBottom" Color="#FF323539" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <Border.Effect>
+                <DropShadowEffect x:Name="BarGlow" Color="#FFFF9A1F" BlurRadius="24" ShadowDepth="0" Opacity="0" />
+            </Border.Effect>
+            <Grid>
+                <Border Height="1" VerticalAlignment="Top" Background="#22FFFFFF" />
+                <Border Height="2" VerticalAlignment="Bottom" Background="#55000000" />
+                <TextBlock x:Name="BarText" Text="T A C K L E D" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           FontFamily="{StaticResource DisplayFont}" FontSize="17">
+                    <TextBlock.Foreground>
+                        <SolidColorBrush x:Name="BarTextBrush" Color="#FF8A8E94" />
+                    </TextBlock.Foreground>
+                </TextBlock>
+            </Grid>
+        </Border>
+
+        <c:Beacon x:Name="RightLed" Grid.Column="2" VerticalAlignment="Center" />
+    </Grid>
+</UserControl>
