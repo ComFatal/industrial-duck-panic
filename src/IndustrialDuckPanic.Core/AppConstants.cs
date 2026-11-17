@@ -49,5 +49,5 @@ public static class AppConstants
     public static readonly TimeSpan TackleTimeout = TimeSpan.FromSeconds(60);
 
     /// <summary>Velopack update source (GitHub repository URL). Empty = updates disabled.</summary>
-    public const string UpdateRepositoryUrl = "";
+    public const string UpdateRepositoryUrl = "https://github.com/ComFatal/rorqual-panic";
 }
