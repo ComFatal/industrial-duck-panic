@@ -66,7 +66,7 @@ public sealed class MainViewModel : ObservableObject
     // ---------------------------------------------------------------- character
 
     private bool _isConnected;
-    public bool IsConnected { get => _isConnected; private set { if (Set(ref _isConnected, value)) Raise(nameof(ShowShipError)); } }
+    public bool IsConnected { get => _isConnected; private set { if (Set(ref _isConnected, value)) Raise(nameof(ShowShipError)); Raise(nameof(CanImOk)); } }
 
     private bool _isLoggingIn;
     public bool IsLoggingIn { get => _isLoggingIn; private set => Set(ref _isLoggingIn, value); }
@@ -99,7 +99,7 @@ public sealed class MainViewModel : ObservableObject
         private set
         {
             if (!Set(ref _shipTypeId, value)) return;
-            Raise(nameof(IsAllowedShip)); Raise(nameof(IsRorqual)); Raise(nameof(ShowShipError));
+            Raise(nameof(IsAllowedShip)); Raise(nameof(IsRorqual)); Raise(nameof(ShowShipError)); Raise(nameof(CanImOk));
         }
     }
 
@@ -128,7 +128,7 @@ public sealed class MainViewModel : ObservableObject
     public SwitchPosition Switch { get => _switch; private set => Set(ref _switch, value); }
 
     private bool _showShipLost;
-    public bool ShowShipLost { get => _showShipLost; private set { if (Set(ref _showShipLost, value)) Raise(nameof(ShowShipError)); } }
+    public bool ShowShipLost { get => _showShipLost; private set { if (Set(ref _showShipLost, value)) Raise(nameof(ShowShipError)); Raise(nameof(CanImOk)); } }
 
     private string _shipLostText = "";
     public string ShipLostText { get => _shipLostText; private set => Set(ref _shipLostText, value); }
@@ -157,7 +157,7 @@ public sealed class MainViewModel : ObservableObject
         AllowedShips.Clear();
         foreach (var (id, name) in ships.OrderBy(s => AppConstants.RorqualTypeIds.Contains(s.Key)).ThenBy(s => s.Value))
             AllowedShips.Add(new ShipEntry(id, name, AppConstants.RorqualTypeIds.Contains(id)));
-        Raise(nameof(IsAllowedShip)); Raise(nameof(ShowShipError));
+        Raise(nameof(IsAllowedShip)); Raise(nameof(ShowShipError)); Raise(nameof(CanImOk));
     }
 
     // ---------------------------------------------------------------- discord config
@@ -611,8 +611,18 @@ public sealed class MainViewModel : ObservableObject
         await SendAsync(AlertKind.Panic);
     }
 
+    /// <summary>
+    /// "I'm OK" works only in an allowed ship, or right after losing one (the pilot is in a capsule and says he got out).
+    /// </summary>
+    public bool CanImOk => IsConnected && (IsAllowedShip || ShowShipLost);
+
     public async Task ImOkAsync()
     {
+        if (!CanImOk)
+        {
+            ShowToast("I'M OK only works in an allowed ship (Porpoise, Orca, Rorqual).", error: true);
+            return;
+        }
         if (await SendAsync(AlertKind.ImOk))
         {
             EndTackle();

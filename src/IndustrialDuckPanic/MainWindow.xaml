@@ -86,7 +86,8 @@
 
                 <!-- I'M OK -->
                 <Button Grid.Row="2" Margin="14,6,14,10" Height="44" HorizontalAlignment="Stretch" MaxWidth="320" Click="ImOk_Click" Cursor="Hand"
-                        ToolTip="Tell Discord you are alive and safe">
+                        IsEnabled="{Binding CanImOk}" ToolTipService.ShowOnDisabled="True"
+                        ToolTip="Tell Discord you are alive and safe (allowed ships only)">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="B" CornerRadius="3" BorderBrush="#FF2ECC71" BorderThickness="1">
@@ -108,6 +109,11 @@
                                             <TranslateTransform Y="1" />
                                         </Setter.Value>
                                     </Setter>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="B" Property="Opacity" Value="0.3" />
+                                    <Setter TargetName="B" Property="BorderBrush" Value="#FF4A3F2E" />
+                                    <Setter Property="Cursor" Value="No" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
